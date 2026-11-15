@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0c1115">
+  <meta name="description" content="One second. One burn. Bring it home. A lunar landing game inspired by the TI SR-56.">
+  <title>Lunar 56 — Lunar Landing</title>
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Lunar 56 home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 5 25h22L16 3Z M16 12v9 M12 27v3m8-3v3"/></svg><span>LUNAR<span class="brand-number">56</span></span></a>
+    <span class="top-note">FLIGHT OPERATIONS / 1976</span>
+    <nav aria-label="Game options">
+      <button id="sound" class="icon-button" title="Enable sound" aria-label="Enable sound" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 4 5 6m0-6-5 6"/></svg></button>
+      <button id="settings" class="icon-button" title="Display settings" aria-label="Display settings"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/></svg></button>
+      <button id="help" class="help-button">How to play <span>?</span></button>
+    </nav>
+  </header>
+  <main>
+    <div class="mission-heading">
+      <div><div class="eyebrow"><span class="orange-dash"></span> SR-56 / 1976</div><h1>Lunar landing.<br><span>Manual control.</span></h1></div>
+      <button id="new-flight" class="text-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 1 8M3 4v6h6"/></svg>New flight</button>
+    </div>
+    <div class="cockpit">
+      <section class="visual-side" aria-label="Flight view and graph">
+        <div class="viewport panel">
+          <div class="view-top"><span><i class="live-dot"></i> EXTERIOR CAM</span><span id="flight-name">CLASSIC / 01</span></div>
+          <canvas id="scene" role="img" aria-label="Animated lunar lander above the surface"></canvas>
+          <div class="view-bottom"><span>MARE TRANQUILLITATIS</span><span id="view-scale">ALT. 2,500 FT</span></div>
+          <div id="result" class="result" hidden>
+            <div class="result-card"><div id="result-kicker" class="eyebrow">CONTACT LIGHT</div><h2 id="result-title">Touchdown.</h2><p id="result-copy"></p><button id="fly-again" class="primary-button">Fly again <span>↗</span></button></div>
+          </div>
+        </div>
+        <section class="graph-panel panel" aria-labelledby="graph-title">
+          <div class="section-top"><h2 id="graph-title">FLIGHT RECORDER</h2><div class="graph-tabs" role="group" aria-label="Graph metric"><button class="selected" data-metric="altitude" aria-pressed="true">Altitude</button><button data-metric="velocity" aria-pressed="false">Velocity</button></div></div>
+          <div class="graph-wrap"><canvas id="graph" role="img" aria-label="Altitude over elapsed flight time"></canvas><div id="graph-tooltip" hidden></div></div>
+          <div class="graph-footer"><span><i></i> ACTUAL FLIGHT</span><span id="graph-hint">Drag to inspect</span><span>TIME / SEC</span></div>
+        </section>
+      </section>
+      <section class="control-side" aria-label="Flight controls">
+        <div class="telemetry panel">
+          <div class="section-top"><h2>TELEMETRY</h2><span id="mission-time">T+ 00:00</span></div>
+          <div class="instruments">
+            <div class="instrument"><span class="instrument-label">ALTITUDE <span>↥</span></span><div><strong id="altitude">2,500</strong><small>ft</small></div><div class="instrument-caption">ABOVE SURFACE</div></div>
+            <div class="instrument"><span id="velocity-label" class="instrument-label">DESCENT <span>↓</span></span><div><strong id="velocity">500</strong><small>ft/s</small></div><div class="instrument-caption">TARGET &lt; 5 FT/S</div></div>
+          </div>
+          <div class="fuel-line"><span>FUEL REMAINING</span><span><strong id="fuel">600</strong> <small>lb</small></span></div><div class="fuel-track"><div id="fuel-bar"></div></div>
+        </div>
+        <section class="burn-panel panel" aria-labelledby="burn-title">
+          <div class="section-top"><h2 id="burn-title">ENGINE CONTROL</h2><span class="turn-badge">1 SEC / TURN</span></div>
+          <div class="burn-value"><label for="burn-number">FUEL BURN<span>Set the next pulse.</span></label><div><input id="burn-number" type="number" min="0" max="75" step="1" value="25" inputmode="numeric" aria-label="Fuel burn in pounds per second"><span>lb/s</span></div></div>
+          <div class="slider-box"><input id="throttle" type="range" min="0" max="75" step="1" value="25" aria-label="Fuel burn slider" aria-valuetext="25 pounds per second"><div class="slider-ticks"><span>0</span><span>25</span><span>50</span><span>75</span></div></div>
+          <div class="presets" role="group" aria-label="Burn presets"><button data-burn="0"><span>0</span>Coast</button><button data-burn="5"><span>5</span>Hold speed</button><button data-burn="75"><span>75</span>Full burn</button></div>
+          <div class="burn-description"><span id="thrust-dot"></span><span id="burn-description">Braking · +20 ft/s each second</span></div>
+          <button id="burn" class="burn-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s2 5-1 8c-2-1-2-3-2-3s-5 5-5 9a8 8 0 0 0 16 0c0-4-4-8-4-8s1 5-2 5c2-6-2-11-2-11Z"/></svg><span id="burn-text">BURN · 1 SEC</span><span class="enter-key">↵</span></button>
+          <div class="control-note" id="control-note">Time waits for your next move.</div>
+        </section>
+        <div class="status-strip" role="status" aria-live="polite"><i id="status-dot"></i><span id="status-text">Awaiting first burn.</span><span id="turn-count">00</span></div>
+        <div class="personal-best"><span>SOFTEST LANDING</span><span id="best">— ft/s</span></div>
+      </section>
+    </div>
+    <footer><span>DESCENT SIMULATOR / 1 SEC PER TURN</span><span>INSPIRED BY THE TI SR-56 <i>·</i> 1976</span></footer>
+  </main>
+</div>
+<dialog id="help-dialog"><div class="dialog-top"><span class="eyebrow">FLIGHT MANUAL</span><button class="close icon-button" aria-label="Close instructions">×</button></div><h2>Easy to fly.<br>Hard to land.</h2><p>You start 2,500 feet up, falling at 500 ft/s, with 600 lb of fuel. Touch down at <strong>less than 5 ft/s</strong>.</p><ol><li><strong>Choose a burn.</strong> Drag the slider, tap a preset, or enter a whole number from 0 to 75.</li><li><strong>Fire for one second.</strong> Tap BURN. The flight pauses again after each turn.</li><li><strong>Watch your descent.</strong> Brake early, then ease off as you approach the surface.</li></ol><div class="manual-grid"><div><b>0</b><span>Free fall.<br>Gain 5 ft/s downward.</span></div><div><b>5</b><span>Balance gravity.<br>Keep your velocity.</span></div><div><b>75</b><span>Maximum thrust.<br>Gain 70 ft/s upward.</span></div></div><p>The engine can reverse your descent. If you rise, coast to come back down. When your tank is empty, the remaining fall plays out.</p><details><summary>The calculator underneath</summary><p>This adaptation uses the SR-56 game's one-second model: acceleration = burn − 5, velocity += acceleration, and altitude += old velocity + acceleration ÷ 2. Touchdown is resolved at the surface within the final second. Fuel is limited to what is in the tank.</p><p>The graph shows altitude or signed velocity over time. Negative velocity means descent. Inspect any recorded point with your finger or mouse.</p><p><a href="https://www.rskey.org/gene/calcgene/56lander.htm" target="_blank" rel="noopener">SR-56 program &amp; original instructions ↗</a></p></details><div class="keyboard-note">Keyboard: Enter to burn · arrow keys on the slider to fine-tune.</div><button class="close primary-button">Back to flight <span>↗</span></button></dialog>
+<dialog id="new-dialog"><div class="dialog-top"><span class="eyebrow">MISSION SETUP</span><button class="close icon-button" aria-label="Close mission setup">×</button></div><h2>Another approach.</h2><p id="restart-note">Choose your starting conditions.</p><div class="mission-options"><button class="mission-option selected" data-mode="classic"><span>01 / CLASSIC</span><strong>The original descent.</strong><small>2,500 ft · 500 ft/s down · 600 lb</small></button><button class="mission-option" data-mode="training"><span>02 / PRACTICE</span><strong>A little room to learn.</strong><small>1,500 ft · 100 ft/s down · 600 lb</small></button></div><button id="launch" class="primary-button">Start flight <span>↗</span></button></dialog>
+<dialog id="settings-dialog"><div class="dialog-top"><span class="eyebrow">DISPLAY</span><button class="close icon-button" aria-label="Close display settings">×</button></div><h2>Your cockpit.</h2><label class="setting-row" for="layout"><span>Screen layout<small>Auto adapts as you fold or rotate.</small></span><select id="layout"><option value="auto">Auto</option><option value="tabletop">Tabletop</option><option value="stacked">Stacked</option></select></label><label class="setting-row" for="motion"><span>Reduced motion<small>Shorter burns, fewer effects.</small></span><input id="motion" type="checkbox"></label><p class="settings-note">Tabletop puts the view above the controls. Your flight stays put when the screen changes.</p><button class="close primary-button">Back to flight <span>↗</span></button></dialog>
+<script type="module" src="./app.mjs"></script>
+</body>
+</html>
